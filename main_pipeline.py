@@ -231,20 +231,32 @@ print("setting up directories...")
 create_dir("./data")    
 hash_path = Path("cogsci19.pkl")
 COG_HASHES = read_pickle(hash_path)
-zip_path = next(Path(".").glob("facebook*.zip"))
+zip_paths = list(Path("./testy/").glob("facebook*.zip"))
 temp_data = create_dir("./temp")
 
-print("writing dropout-status...")
+print("writing activity-status...")
 with open(Path("./data/dropout.json"), "w") as f:	
 	json.dump({"is_dropout": is_dropout}, f)
 
 print("finding messages in zip-file...")
-unzip_msg_files(zip_path, temp_data)
-print("done!")
-print("anonymizing the data....")
-for convo_file in find_all_messages(temp_data):
-    anon_pipeline(convo_file)
-print("done!")
+if len(zip_paths) > 0:
+    for zip_path in zip_paths:
+        unzip_msg_files(zip_path, temp_data)
+    print("done!")
+    print("anonymizing the data....")
+    for convo_file in find_all_messages(temp_data):
+        anon_pipeline(convo_file)
+    print("done!")
+
+else:
+    print("Mac has done the job for us!")
+    print("anonymizing the data....")
+    for convo_file in find_all_messages(Path("./messages")):
+        anon_pipeline(convo_file)
+    print("done!")
+
+
+
 # Writing data to zip
 print("write data to zip!")
 shutil.make_archive(f"all_the_data_{random_long_id(N=8)}", 'zip', "data")
