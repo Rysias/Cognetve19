@@ -231,7 +231,7 @@ print("setting up directories...")
 create_dir("./data")    
 hash_path = Path("cogsci19.pkl")
 COG_HASHES = read_pickle(hash_path)
-zip_paths = list(Path("./testy/").glob("facebook*.zip"))
+zip_paths = list(Path(".").glob("facebook*.zip"))
 temp_data = create_dir("./temp")
 
 print("writing activity-status...")
